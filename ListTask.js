@@ -24,50 +24,80 @@ function showTasks() {
 }
 
 function addTask(description) {
-  tasks.push({ description, completed: false });
-  console.log('Tarea añadida.');
+  return new Promise((resolve, reject) => {
+    tasks.push({ description, completed: false });
+    resolve('Tarea añadida.');
+  });
 }
 
 function completeTask(index) {
-  if (index >= 0 && index < tasks.length) {
-    tasks[index].completed = true;
-    console.log('Tarea completada.');
-  } else {
-    console.log('Índice de tarea inválido.');
-  }
+  return new Promise((resolve, reject) => {
+    if (index >= 0 && index < tasks.length) {
+      tasks[index].completed = true;
+      resolve('Tarea completada.');
+    } else {
+      reject('Índice de tarea inválido.');
+    }
+  });
 }
 
 function deleteTask(index) {
-  if (index >= 0 && index < tasks.length) {
-    tasks.splice(index, 1);
-    console.log('Tarea eliminada.');
-  } else {
-    console.log('Índice de tarea inválido.');
-  }
+  return new Promise((resolve, reject) => {
+    if (index >= 0 && index < tasks.length) {
+      tasks.splice(index, 1);
+      resolve('Tarea eliminada.');
+    } else {
+      reject('Índice de tarea inválido.');
+    }
+  });
 }
 
-function handleInput(input) {
+async function handleInput(input) {
   switch (input) {
     case '1':
       showTasks();
       break;
     case '2':
-      rl.question('Descripción de la tarea: ', (description) => {
-        addTask(description);
-        showMenu();
+      const description = await new Promise((resolve) => {
+        rl.question('Descripción de la tarea: ', (description) => {
+          resolve(description);
+        });
       });
+      try {
+        const result = await addTask(description);
+        console.log(result);
+        showMenu();
+      } catch (error) {
+        console.error(error);
+      }
       break;
     case '3':
-      rl.question('Índice de la tarea a completar: ', (index) => {
-        completeTask(parseInt(index) - 1);
-        showMenu();
+      const completeIndex = await new Promise((resolve) => {
+        rl.question('Índice de la tarea a completar: ', (index) => {
+          resolve(parseInt(index) - 1);
+        });
       });
+      try {
+        const result = await completeTask(completeIndex);
+        console.log(result);
+        showMenu();
+      } catch (error) {
+        console.error(error);
+      }
       break;
     case '4':
-      rl.question('Índice de la tarea a eliminar: ', (index) => {
-        deleteTask(parseInt(index) - 1);
-        showMenu();
+      const deleteIndex = await new Promise((resolve) => {
+        rl.question('Índice de la tarea a eliminar: ', (index) => {
+          resolve(parseInt(index) - 1);
+        });
       });
+      try {
+        const result = await deleteTask(deleteIndex);
+        console.log(result);
+        showMenu();
+      } catch (error) {
+        console.error(error);
+      }
       break;
     case '0':
       rl.close();
@@ -78,7 +108,15 @@ function handleInput(input) {
   }
 }
 
+function handleInputThen(input) {
+  handleInput(input)
+    .then(() => {})
+    .catch((error) => {
+      console.log(error);
+    });
+}
+
 showMenu();
 rl.on('line', (input) => {
-  handleInput(input);
+  handleInputThen(input);
 });
