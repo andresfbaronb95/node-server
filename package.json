@@ -1,0 +1,11 @@
+{
+  "name": "lista-de-tareas-node",
+  "version": "1.0.0",
+  "description": "lista de tareas con diferentes funciones como agregar, eliminar y completado",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andres Felipe Baron Becerra",
+  "license": "ISC"
+}
