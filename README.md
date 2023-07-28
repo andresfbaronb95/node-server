@@ -1,0 +1,3 @@
+Con el async y await se pudo trabajar de una manera mas sencilla y rapida las promesas lo que facilita el trabajo de las tareas asincronas
+Al usar el metodo then() pudimos manejas la resolucion y el recahzo de las promesas
+La diferencia entre estas dos es que al usar async y await se trabaja de manera mas sencilla y comprensible, en cambio al usar el then() se puede convertir en un proceso mas tedioso.
